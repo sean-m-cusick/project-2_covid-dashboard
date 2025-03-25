@@ -1,0 +1,478 @@
+---
+title: "COVID Dashboard data exploration"
+output: html_notebook
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+This notebook will be used for two functions:
+
+1) To download and assess the quality of the datasets, and to decide how to wrangle and clean them.
+2) To explore the cleaned data sets.
+
+The actual cleaning of the data sets will be handled in the `data_cleaning.R` file. 
+
+#__________________________________
+# 1. INSTALL & LOAD LIBRARIES #####
+#__________________________________
+
+```{r - library check, echo=FALSE, warning=FALSE, message=FALSE}
+
+if (!require(shiny)) install.packages("shiny", dependencies=TRUE)
+if (!require(leaflet)) install.packages("leaflet", dependencies=TRUE)
+if (!require(ggplot2)) install.packages("ggplot2", dependencies=TRUE) 
+if (!require(readr)) install.packages("readr", dependencies=TRUE)
+if (!require(dplyr)) install.packages("dplyr", dependencies=TRUE) 
+if (!require(naniar)) install.packages("naniar", dependencies=TRUE)
+if (!require(tidyverse)) install.packages("tidyverse", dependencies=TRUE)
+if (!require(janitor)) install.packages("janitor", dependencies=TRUE)
+if (!require(stringr)) install.packages("stringr", dependencies=TRUE)
+if (!require(here)) install.packages("here", dependencies=TRUE)
+if (!require(broom)) install.packages("broom", dependencies=TRUE)
+if (!require(slider)) install.packages("slider", dependencies=TRUE)
+if (!require(lubridate)) install.packages("lubridate", dependencies=TRUE)
+if (!require(factoextra)) install.packages("factoextra", dependencies=TRUE)
+```
+
+```{r - library load, echo=FALSE, warning=FALSE, message=FALSE}
+library(shiny)
+library(leaflet)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(naniar)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(here)
+library(broom)
+library(slider)
+library(lubridate)
+library(factoextra)
+```
+
+#________________________________
+# 2.DOWNLOAD & LOAD DATA    #####
+#________________________________
+
+```{r - check data subdirectory}
+# Ensure the `data_raw` directory exists
+if (!dir.exists("data_raw")) {
+  dir.create("data_raw")
+}
+```
+
+```{r - define data urls}
+# Define the URLs for the CSV files
+urls <- list(
+  "total_cases_by_health_board" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/7fad90e5-6f19-455b-bc07-694a22f8d5dc/download/total_cases_by_hb_20231004.csv",
+  "total_cases_by_local_authority" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/e8454cf0-1152-4bcb-b9da-4343f625dfef/download/total_cases_by_la_20231004.csv",
+  "total_cases_by_age_sex" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/19646dce-d830-4ee0-a0a9-fcec79b5ac71/download/total_cases_agesex_20231004.csv", 
+  "total_cases_by_deprivation" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/a965ee86-0974-4c93-bbea-e839e27d7085/download/total_cases_simd_20231004.csv",
+  "daily_case_trends_by_health_board" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/2dd8534b-0a6f-4744-9253-9565d62f96c2/download/trend_hb_20231004.csv", 
+  "daily_case_trends_by_local_authority" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/427f9a25-db22-4014-a3bc-893b68243055/download/trend_ca_20231004.csv",
+  "daily_case_trends_by_age_sex" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/9393bd66-5012-4f01-9bc5-e7a10accacf4/download/trend_agesex_20231004.csv", 
+  "daily_case_trends_by_deprivation" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/a38a4c21-7c75-4ecd-a511-3f83e0e8f0c3/download/trend_simd_20231004.csv", 
+  "tests_by_health_board" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/8da654cd-293b-4286-96a4-b3ece86225f0/download/test_hb_20231004.csv", 
+  "tests_by_local_authority" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/3349540e-dc63-4d6d-a78b-00387b9aca50/download/test_ca_20231004.csv", 
+  "daily_covid_hospital_admissions" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/bb4d083b-7b92-4722-85a3-a9b58af1f794/download/daily_covid_admissions_20231004.csv", 
+  "ethnicity" = "https://www.opendata.nhs.scot/dataset/b318bddf-a4dc-4262-971f-0ba329e09b87/resource/07b3dff7-3254-4d26-946f-6cd9ff276a1d/download/ethnicity_20231004.csv",
+  "hospital_locations" = "https://www.opendata.nhs.scot/dataset/cbd1802e-0e04-4282-88eb-d7bdcfb120f0/resource/c698f450-eeed-41a0-88f7-c1e40a568acc/download/hospitals.csv",
+    "council_area_2019" = "https://www.opendata.nhs.scot/dataset/9f942fdb-e59e-44f5-b534-d6e17229cc7b/resource/967937c4-8d67-4f39-974f-fd58c4acfda5/download/ca11_ca19.csv",
+  "statistical_qualifiers" = "https://www.opendata.nhs.scot/dataset/2b6f00ec-fee3-4828-9303-89f31b436d2a/resource/b80f9af0-b115-4245-b591-fb22775226c4/download/statisticalqualifiers24052019.csv",
+  "ca_pop_est" = "https://www.opendata.nhs.scot/dataset/7f010430-6ce1-4813-b25c-f7f335bdc4dc/resource/09ebfefb-33f4-4f6a-8312-2d14e2b02ace/download/ca2019_pop_est_29012025.csv",
+  "hscp_pop_est" = "https://www.opendata.nhs.scot/dataset/7f010430-6ce1-4813-b25c-f7f335bdc4dc/resource/c3a393ce-253b-4c75-82dc-06b1bb5638a3/download/hscp2019_pop_est_29012025.csv",
+  "hb_pop_est" = "https://www.opendata.nhs.scot/dataset/7f010430-6ce1-4813-b25c-f7f335bdc4dc/resource/27a72cc8-d6d8-430c-8b4f-3109a9ceadb1/download/hb2019_pop_est_29012025.csv",
+  "scotland_pop_proj" = "https://www.opendata.nhs.scot/dataset/9e00b589-817e-45e6-b615-46c935bbace0/resource/7a9e74c9-8746-488b-8fba-0fad7c7866ea/download/scotland_pop_proj_05022025.csv",
+  "ca_pop_proj" = "https://www.opendata.nhs.scot/dataset/9e00b589-817e-45e6-b615-46c935bbace0/resource/63d8e0b9-32e2-4847-9353-177f8d931c10/download/ca_pop_proj_03072020.csv",
+  "hscp_pop_proj" = "https://www.opendata.nhs.scot/dataset/9e00b589-817e-45e6-b615-46c935bbace0/resource/93137613-2f5c-4d8f-b756-0432abb6fbc0/download/hscp_pop_proj_03072020.csv",
+  "hb_pop_proj" = "https://www.opendata.nhs.scot/dataset/9e00b589-817e-45e6-b615-46c935bbace0/resource/0876fc67-05e6-4e87-bc30-c4b0756fff04/download/hb_pop_proj_03072020.csv"
+  )
+```
+
+```{r - download data}
+# Download the files if they don't already exist
+for (name in names(urls)) {
+  file_path <- paste0("data_raw/", name, ".csv")
+  if (!file.exists(file_path)) {
+    download.file(urls[[name]], file_path)
+    message(paste(name, "downloaded successfully."))
+  } else {
+    message(paste(name, "already exists. Skipping download."))
+  }
+}
+```
+
+```{r - load data, echo=FALSE, warning=FALSE, message=FALSE}
+# Load the datasets
+total_cases_by_health_board <- read_csv("data_clean/clean_total_cases_by_health_board.csv")
+total_cases_by_local_authority <- read_csv("data_raw/total_cases_by_local_authority.csv")
+total_cases_by_age_sex <- read_csv("data_clean/clean_total_cases_by_age_sex.csv")
+total_cases_by_deprivation <- read_csv("data_clean/clean_total_cases_by_deprivation.csv")
+daily_case_trends_by_health_board <- read_csv("data_clean/clean_daily_case_trends_by_health_board.csv")
+daily_case_trends_by_local_authority <- read_csv("data_clean/clean_daily_case_trends_by_local_authority.csv")
+daily_case_trends_by_age_sex <- read_csv("data_clean/clean_daily_case_trends_by_age_sex.csv")
+daily_case_trends_by_deprivation <- read_csv("data_clean/clean_daily_case_trends_by_deprivation.csv")
+tests_by_health_board <- read_csv("data_clean/clean_tests_by_health_board.csv")
+tests_by_local_authority <- read_csv("data_clean/clean_tests_by_local_authority.csv")
+daily_covid_hospital_admissions <- read_csv("data_clean/clean_daily_covid_hospital_admissions.csv")
+ethnicity <- read_csv("data_clean/clean_ethnicity.csv")
+hospital_location <- read_csv("data_clean/clean_hospital_location.csv")
+council_area_2019 <- read_csv("data_clean/clean_council_area_2019.csv")
+statistical_qualifiers <- read_csv("data_raw/statistical_qualifiers.csv")
+ca_pop_est <- read_csv("data_clean/clean_ca_pop_est.csv")
+hscp_pop_est <- read_csv("data_clean/clean_hscp_pop_est.csv")
+hb_pop_est <- read_csv("data_clean/clean_hb_pop_est.csv")
+scotland_pop_proj <- read_csv("data_clean/clean_scotland_pop_proj.csv")
+ca_pop_proj <- read_csv("data_clean/clean_ca_pop_proj.csv")
+hscp_pop_proj <- read_csv("data_clean/clean_hscp_pop_proj.csv")
+hb_pop_proj <- read_csv("data_clean/clean_hb_pop_proj.csv")
+```
+
+#____________________________________
+# 3. ASSESS DATASETS - BASICS  #####
+#____________________________________
+The following code can be copied and pasted and then adapted as I
+explore each dataset. These are the fundamental tools I use to explore a
+dataset.
+
+## Initial look at dataset
+------------------------------------------------------------------------
+
+```{r - data structure}
+# Check the structure of the datasets
+str(total_cases_by_local_authority)
+str(total_cases_by_health_board)
+str(total_cases_by_deprivation)
+str(total_cases_by_age_sex)
+str(tests_by_local_authority)
+str(tests_by_health_board)
+str(hospital_location)
+str(ethnicity)
+str(daily_covid_hospital_admissions)
+str(daily_case_trends_by_local_authority)
+str(daily_case_trends_by_health_board)
+str(daily_case_trends_by_deprivation)
+str(daily_case_trends_by_age_sex)
+str(council_area_2019)
+# str(statistical_qualifiers) # This is a dictionary and doesn't require wrangling or cleaning
+str(ca_pop_est)
+str(hscp_pop_est)
+str(hb_pop_est)
+str(scotland_pop_proj)
+str(ca_pop_proj)
+str(hscp_pop_proj)
+str(hb_pop_proj)
+```
+* `total_cases_by_local_authority`: New reported daily and cumulative counts and rates for positive COVID-19 cases, negative tests and deaths at Council area (local authority) level.
+  * Date - [Date] - can use lubridate to separate into more manageable variables (year, month, day, period)
+  * CA - [chr] - Council Area - gives a code eg "S12000006" , that can be linked to CAName - also found in `hospital_locations`.
+  * CAName - [chr] - Council Area Name - gives a name eg "Clackmannashire" , that can be linked to CA`.
+  * NewPositive                         : num [1:32] 7 45 31 37 20 7 20 64 21 16 ...
+  * AverageDailyPositive7Days           : num [1:32] 1 6.43 4.43 5.29 2.86 ...
+  * TotalCases                          : num [1:32] 22409 50863 54624 42488 42986 ...
+  * CrudeRatePositive                   : num [1:32] 43691 34300 44921 39377 44749 ...
+  * TotalPCROnly                        : num [1:32] 15472 32453 37242 27022 29642 ...
+  * AverageDailyPCROnly7Days            : num [1:32] 0.286 3 2.286 1.857 1.429 ...
+  * TotalLFDOnly                        : num [1:32] 5179 14311 13588 12340 10919 ...
+  * AverageDailyLFDOnly7Days            : num [1:32] 0.714 3.429 2.143 3.429 1.429 ...
+  * TotalLFDAndPCR                      : num [1:32] 1758 4099 3794 3126 2425 ...
+  * AverageDailyLFDAndPCR7Days          : num [1:32] NA NA NA NA NA NA NA NA NA NA ...
+  * FirstInfections                     : num [1:32] 20537 47615 49596 39466 39554 ...
+  * AverageDailyFirstInfections7Days    : num [1:32] 0.714 4.429 3.143 2.857 1.571 ...
+  * Reinfections                        : num [1:32] 1872 3248 5028 3022 3432 ...
+  * AverageDailyReinfections7Days       : num [1:32] 0.286 2 1.286 2.429 1.286 ...
+  * PercentReinfections                 : num [1:32] 8.35 6.39 9.2 7.11 7.98 ...
+  * AverageDailyPercentReinfections7Days: num [1:32] 28.6 31.1 29 45.9 45 ...
+ 
+* `total_cases_by_health_board`:
+  *
+* `total_cases_by_deprivation`:
+  *
+* `total_cases_by_age_sex`:
+  *
+* `tests_by_local_authority`:
+  *
+* `tests_by_health_board`:
+  *
+* `hospital_location`:
+  *
+* `ethnicity`:
+  *
+* `daily_covid_hospital_admissions`:
+  *
+* `daily_case_trends_by_local_authority`:
+  *
+* `daily_case_trends_by_health_board`:
+  *
+* `daily_case_trends_by_deprivation`:
+  *
+* `daily_case_trends_by_age_sex`:
+  *
+
+```{r - summary statistics}
+# Summary statistics
+summary(total_cases_by_local_authority)
+summary(total_cases_by_health_board)
+summary(total_cases_by_deprivation)
+summary(total_cases_by_age_sex)
+summary(tests_by_local_authority)
+summary(tests_by_health_board)
+summary(hospital_location)
+summary(ethnicity)
+summary(daily_covid_hospital_admissions)
+summary(daily_case_trends_by_local_authority)
+summary(daily_case_trends_by_health_board)
+summary(daily_case_trends_by_deprivation)
+summary(daily_case_trends_by_age_sex)
+summary(council_area_2019)
+# summary(statistical_qualifiers)  # This is a dictionary and doesn't require wrangling or cleaning
+summary(ca_pop_est)
+summary(hscp_pop_est)
+summary(hb_pop_est)
+summary(scotland_pop_proj)
+summary(ca_pop_proj)
+summary(hscp_pop_proj)
+summary(hb_pop_proj)
+```
+
+```{r - Head rows}
+# View the first few rows
+head(total_cases_by_local_authority)
+head(total_cases_by_health_board)
+head(total_cases_by_deprivation)
+head(total_cases_by_age_sex)
+head(tests_by_local_authority)
+head(tests_by_health_board)
+head(hospital_location)
+head(ethnicity)
+head(daily_covid_hospital_admissions)
+head(daily_case_trends_by_local_authority)
+head(daily_case_trends_by_health_board)
+head(daily_case_trends_by_deprivation)
+head(daily_case_trends_by_age_sex)
+head(council_area_2019)
+# head(statistical_qualifiers)  # This is a dictionary and doesn't require wrangling or cleaning
+head(ca_pop_est)
+head(hscp_pop_est)
+head(hb_pop_est)
+head(scotland_pop_proj)
+head(ca_pop_proj)
+head(hscp_pop_proj)
+head(hb_pop_proj)
+```
+
+## Missing Data
+
+------------------------------------------------------------------------
+The majority of the missing data are in the qualifier columns, e.g, `hbqf`, `sex_qf`, etc.
+The qualifier column contains NA values to indicate that no data quality issues were identified for those records. Replacing NA values with 0 or another placeholder would obscure this information and potentially misrepresent the data. Retaining NA values ensures transparency and preserves the integrity of the dataset, allowing for accurate interpretation and analysis.
+
+```{r - Missing data plot}
+# Visualize missing data
+gg_miss_var(total_cases_by_local_authority) #Orkney's `AverageDailyPCROnly7Days` has an NA
+gg_miss_var(total_cases_by_health_board)
+gg_miss_var(total_cases_by_deprivation)
+gg_miss_var(total_cases_by_age_sex)
+gg_miss_var(tests_by_local_authority)
+gg_miss_var(tests_by_health_board)
+gg_miss_var(hospital_location)
+gg_miss_var(ethnicity)
+gg_miss_var(daily_covid_hospital_admissions)
+gg_miss_var(daily_case_trends_by_local_authority)
+gg_miss_var(daily_case_trends_by_health_board)
+gg_miss_var(daily_case_trends_by_deprivation)
+gg_miss_var(daily_case_trends_by_age_sex)
+gg_miss_var(council_area_2019)
+gg_miss_var(ca_pop_est)
+gg_miss_var(hscp_pop_est)
+gg_miss_var(hb_pop_est)
+gg_miss_var(scotland_pop_proj)
+gg_miss_var(ca_pop_proj)
+gg_miss_var(hscp_pop_proj)
+gg_miss_var(hb_pop_proj) #hb_qf and sex_qf is looking at the qualifiers of the data, and for most rows it is not applicable and so NA is 
+```
+
+This code is to be used if it becomes necessary to remove NA values from the datasets.
+```{r - replace NA}
+# Handle missing values by replacing with 0
+# total_cases_by_local_authority <- total_cases_by_local_authority %>%
+#   mutate(across(everything(), ~ifelse(is.na(.), 0, .)))
+```
+
+
+
+#___________________________________________________________
+# 4. DATA EXPLORATION - total_cases_by_health_board    #####
+#___________________________________________________________
+
+# Check the structure of the dataset str(total_cases_by_health_board)
+```{r}
+# Summary statistics
+summary(total_cases_by_health_board)
+```
+
+
+```{r}
+# View the first few rows
+head(total_cases_by_health_board)
+```
+
+
+```{r}
+# Visualize missing data
+gg_miss_var(total_cases_by_health_board)
+```
+
+
+
+#______________________________________________________________
+# 5. DATA EXPLORATION - total_cases_by_local_authority    #####
+#______________________________________________________________
+
+# Check the structure of the dataset str(total_cases_by_local_authority)
+```{r}
+# Summary statistics
+summary(total_cases_by_local_authority)
+```
+
+
+```{r}
+# View the first few rows
+head(total_cases_by_local_authority)
+```
+
+
+```{r}
+# Visualize missing data
+gg_miss_var(total_cases_by_local_authority)
+```
+#_______________________________________________________________
+# 6. DATA EXPLORATION - total_cases_by_age_sex #####
+#_______________________________________________________________
+
+total_cases_by_age_sex <- total_cases_by_age_sex %>% mutate(Date =
+as.Date(as.character(Date), format = "%Y%m%d"))
+
+# Convert Date and create new variables for total_cases_by_age_sex
+
+total_cases_by_age_sex <- total_cases_by_age_sex %>% mutate(Date =
+ymd(Date), Year = year(Date), Month = month(Date, label = TRUE), Day =
+day(Date), Week = week(Date), Weekday = wday(Date, label = TRUE))
+
+#___________________________________________________________________
+# 7. DATA EXPLORATION - total_cases_by_deprivation #####
+#___________________________________________________________________
+total_cases_by_deprivation <- total_cases_by_deprivation %>%
+mutate(Date = as.Date(Date, format = "%Y-%m-%d"))
+
+daily_case_trends_by_health_board <- daily_case_trends_by_health_board
+%>% mutate(Date = as.Date(Date, format = "%Y-%m-%d"))
+
+#_____________________________________________________________________________
+# 8. DATA EXPLORATION - daily_case_trends_by_local_authority #####
+#_____________________________________________________________________________
+daily_case_trends_by_local_authority <-
+daily_case_trends_by_local_authority %>% mutate(Date = as.Date(Date,
+format = "%Y-%m-%d"))
+
+# Convert Date and create new variables for daily_case_trends_by_local_authority
+
+daily_case_trends_by_local_authority <-
+daily_case_trends_by_local_authority %>% mutate(Date = ymd(Date), Year
+= year(Date), Month = month(Date, label = TRUE), Day = day(Date), Week =
+week(Date), Weekday = wday(Date, label = TRUE))
+
+#______________________________________________________________________
+# 9. DATA EXPLORATION - daily_case_trends_by_age_sex #####
+#______________________________________________________________________
+
+daily_case_trends_by_age_sex <- daily_case_trends_by_age_sex %>%
+mutate(Date = as.Date(as.character(Date), format = "%Y%m%d"))
+
+# Convert Date and create new variables for daily_case_trends_by_age_sex
+
+daily_case_trends_by_age_sex <- daily_case_trends_by_age_sex %>%
+mutate(Date = ymd(Date), Year = year(Date), Month = month(Date, label =
+TRUE), Day = day(Date), Week = week(Date), Weekday = wday(Date, label =
+TRUE))
+
+#___________________________________________________________________________
+# 10. DATA EXPLORATION - daily_case_trends_by_deprivation #####
+#___________________________________________________________________________
+
+daily_case_trends_by_deprivation <- daily_case_trends_by_deprivation %>%
+mutate(Date = as.Date(Date, format = "%Y-%m-%d"))
+
+# Convert Date and create new variables for daily_case_trends_by_deprivation
+
+daily_case_trends_by_deprivation <- daily_case_trends_by_deprivation
+%>% mutate(Date = ymd(Date), Year = year(Date), Month = month(Date,
+label = TRUE), Day = day(Date), Week = week(Date), Weekday = wday(Date,
+label = TRUE))
+
+#_______________________________________________________________
+# 11. DATA EXPLORATION - tests_by_health_board #####
+#_______________________________________________________________
+tests_by_health_board <- tests_by_health_board %>% mutate(Date =
+as.Date(Date, format = "%Y-%m-%d"))
+
+# Convert Date and create new variables for tests_by_health_board
+
+tests_by_health_board <- tests_by_health_board %>% mutate(Date =
+ymd(Date), Year = year(Date), Month = month(Date, label = TRUE), Day =
+day(Date), Week = week(Date), Weekday = wday(Date, label = TRUE))
+
+#__________________________________________________________________
+# 12. DATA EXPLORATION - tests_by_local_authority #####
+#__________________________________________________________________
+
+tests_by_local_authority <- tests_by_local_authority %>% mutate(Date =
+as.Date(Date, format = "%Y-%m-%d"))
+
+# Convert Date and create new variables for tests_by_local_authority
+
+tests_by_local_authority <- tests_by_local_authority %>% mutate(Date =
+ymd(Date), Year = year(Date), Month = month(Date, label = TRUE), Day =
+day(Date), Week = week(Date), Weekday = wday(Date, label = TRUE))
+
+#_________________________________________________________________________
+# 13. DATA EXPLORATION - daily_covid_hospital_admissions #####
+#_________________________________________________________________________
+
+daily_covid_hospital_admissions <- daily_covid_hospital_admissions %>%
+mutate(Date = as.Date(Date, format = "%Y-%m-%d"))
+
+daily_covid_hospital_admissions <- daily_covid_hospital_admissions %>%
+mutate(Date = ymd(Date), Year = year(Date), Month = month(Date, label =
+TRUE), Day = day(Date), Week = week(Date), Weekday = wday(Date, label =
+TRUE))
+
+#___________________________________________________
+# 14. DATA EXPLORATION - ethnicity #####
+#___________________________________________________
+
+ethnicity <- ethnicity %>% mutate(Date = ymd(Date), Year = year(Date),
+Month = month(Date, label = TRUE), Day = day(Date), Week = week(Date),
+Weekday = wday(Date, label = TRUE))
+
+#___________________________________________________________
+# 15. DATA EXPLORATION - hospital_location #####
+#___________________________________________________________
+
+```{r}
+non_numeric_lng <- !is.numeric(hospital_location$lng)
+non_numeric_lat <- !is.numeric(hospital_location$lat)
+```
+```{r}
+blank_lng <- hospital_location$lng == ""
+blank_lat <- hospital_location$lat == ""
+print(hospital_location[blank_lng | blank_lat, ])
+```
+```{r}
+hospital_location$lng <- trimws(hospital_location$lng)
+hospital_location$lat <- trimws(hospital_location$lat)
+```
+
+

@@ -1,0 +1,267 @@
+Month,Ethnicity,NumberAdmitted,NumberAdmittedQF,PercentAdmitted,PercentAdmittedQF
+20200301,African,,c,,c
+20200301,"Asian, Asian Scottish or Asian British",13,,1,
+20200301,Caribbean or Black,,c,,c
+20200301,Mixed or Multiple Ethnic Groups,6,,0.46,
+20200301,Other,,c,,c
+20200301,Unknown,268,,20.68,
+20200301,White,1003,,77.39,
+20200401,African,6,,0.23,
+20200401,"Asian, Asian Scottish or Asian British",56,,2.19,
+20200401,Caribbean or Black,6,,0.23,
+20200401,Mixed or Multiple Ethnic Groups,9,,0.35,
+20200401,Other,10,,0.39,
+20200401,Unknown,472,,18.44,
+20200401,White,2000,,78.16,
+20200501,African,,c,,c
+20200501,"Asian, Asian Scottish or Asian British",10,,1.78,
+20200501,Caribbean or Black,,c,,c
+20200501,Mixed or Multiple Ethnic Groups,,c,,c
+20200501,Other,,c,,c
+20200501,Unknown,94,,16.7,
+20200501,White,451,,80.11,
+20200601,African,,c,,c
+20200601,"Asian, Asian Scottish or Asian British",9,,11.54,
+20200601,Caribbean or Black,,c,,c
+20200601,Mixed or Multiple Ethnic Groups,,c,,c
+20200601,Other,,c,,c
+20200601,Unknown,12,,15.38,
+20200601,White,55,,70.51,
+20200701,African,,c,,c
+20200701,"Asian, Asian Scottish or Asian British",,c,,c
+20200701,Caribbean or Black,,c,,c
+20200701,Mixed or Multiple Ethnic Groups,,c,,c
+20200701,Other,,c,,c
+20200701,Unknown,,c,,c
+20200701,White,13,,68.42,
+20200801,African,,c,,c
+20200801,"Asian, Asian Scottish or Asian British",6,,12.77,
+20200801,Caribbean or Black,,c,,c
+20200801,Mixed or Multiple Ethnic Groups,,c,,c
+20200801,Other,,c,,c
+20200801,Unknown,,c,,c
+20200801,White,35,,74.47,
+20200901,African,,c,,c
+20200901,"Asian, Asian Scottish or Asian British",14,,4.75,
+20200901,Caribbean or Black,,c,,c
+20200901,Mixed or Multiple Ethnic Groups,,c,,c
+20200901,Other,5,,1.69,
+20200901,Unknown,52,,17.63,
+20200901,White,220,,74.58,
+20201001,African,10,,0.46,
+20201001,"Asian, Asian Scottish or Asian British",73,,3.35,
+20201001,Caribbean or Black,,c,,c
+20201001,Mixed or Multiple Ethnic Groups,8,,0.37,
+20201001,Other,10,,0.46,
+20201001,Unknown,218,,10.01,
+20201001,White,1857,,85.3,
+20201101,African,12,,0.63,
+20201101,"Asian, Asian Scottish or Asian British",81,,4.24,
+20201101,Caribbean or Black,7,,0.37,
+20201101,Mixed or Multiple Ethnic Groups,12,,0.63,
+20201101,Other,16,,0.84,
+20201101,Unknown,239,,12.5,
+20201101,White,1545,,80.81,
+20201201,African,9,,0.48,
+20201201,"Asian, Asian Scottish or Asian British",53,,2.85,
+20201201,Caribbean or Black,,c,,c
+20201201,Mixed or Multiple Ethnic Groups,12,,0.65,
+20201201,Other,10,,0.54,
+20201201,Unknown,257,,13.82,
+20201201,White,1519,,81.67,
+20210101,African,11,,0.29,
+20210101,"Asian, Asian Scottish or Asian British",88,,2.31,
+20210101,Caribbean or Black,,c,,c
+20210101,Mixed or Multiple Ethnic Groups,18,,0.47,
+20210101,Other,13,,0.34,
+20210101,Unknown,501,,13.17,
+20210101,White,3168,,83.3,
+20210201,African,7,,0.39,
+20210201,"Asian, Asian Scottish or Asian British",46,,2.55,
+20210201,Caribbean or Black,,c,,c
+20210201,Mixed or Multiple Ethnic Groups,7,,0.39,
+20210201,Other,9,,0.5,
+20210201,Unknown,277,,15.35,
+20210201,White,1457,,80.72,
+20210301,African,,c,,c
+20210301,"Asian, Asian Scottish or Asian British",58,,7.34,
+20210301,Caribbean or Black,,c,,c
+20210301,Mixed or Multiple Ethnic Groups,5,,0.63,
+20210301,Other,7,,0.89,
+20210301,Unknown,108,,13.67,
+20210301,White,606,,76.71,
+20210401,African,,c,,c
+20210401,"Asian, Asian Scottish or Asian British",34,,9.91,
+20210401,Caribbean or Black,,c,,c
+20210401,Mixed or Multiple Ethnic Groups,6,,1.75,
+20210401,Other,10,,2.92,
+20210401,Unknown,53,,15.45,
+20210401,White,236,,68.8,
+20210501,African,8,,2.23,
+20210501,"Asian, Asian Scottish or Asian British",92,,25.63,
+20210501,Caribbean or Black,5,,1.39,
+20210501,Mixed or Multiple Ethnic Groups,13,,3.62,
+20210501,Other,8,,2.23,
+20210501,Unknown,60,,16.71,
+20210501,White,173,,48.19,
+20210601,African,12,,1.43,
+20210601,"Asian, Asian Scottish or Asian British",37,,4.42,
+20210601,Caribbean or Black,5,,0.6,
+20210601,Mixed or Multiple Ethnic Groups,13,,1.55,
+20210601,Other,9,,1.07,
+20210601,Unknown,142,,16.95,
+20210601,White,620,,73.99,
+20210701,African,15,,0.85,
+20210701,"Asian, Asian Scottish or Asian British",47,,2.66,
+20210701,Caribbean or Black,5,,0.28,
+20210701,Mixed or Multiple Ethnic Groups,17,,0.96,
+20210701,Other,17,,0.96,
+20210701,Unknown,268,,15.16,
+20210701,White,1399,,79.13,
+20210801,African,9,,0.62,
+20210801,"Asian, Asian Scottish or Asian British",28,,1.92,
+20210801,Caribbean or Black,,c,,c
+20210801,Mixed or Multiple Ethnic Groups,8,,0.55,
+20210801,Other,8,,0.55,
+20210801,Unknown,214,,14.65,
+20210801,White,1190,,81.45,
+20210901,African,20,,0.63,
+20210901,"Asian, Asian Scottish or Asian British",73,,2.29,
+20210901,Caribbean or Black,8,,0.25,
+20210901,Mixed or Multiple Ethnic Groups,11,,0.35,
+20210901,Other,14,,0.44,
+20210901,Unknown,450,,14.12,
+20210901,White,2611,,81.93,
+20211001,African,,c,,c
+20211001,"Asian, Asian Scottish or Asian British",46,,1.97,
+20211001,Caribbean or Black,7,,0.3,
+20211001,Mixed or Multiple Ethnic Groups,8,,0.34,
+20211001,Other,14,,0.6,
+20211001,Unknown,315,,13.48,
+20211001,White,1945,,83.26,
+20211101,African,7,,0.38,
+20211101,"Asian, Asian Scottish or Asian British",27,,1.47,
+20211101,Caribbean or Black,,c,,c
+20211101,Mixed or Multiple Ethnic Groups,9,,0.49,
+20211101,Other,21,,1.15,
+20211101,Unknown,281,,15.34,
+20211101,White,1483,,80.95,
+20211201,African,6,,0.32,
+20211201,"Asian, Asian Scottish or Asian British",41,,2.21,
+20211201,Caribbean or Black,,c,,c
+20211201,Mixed or Multiple Ethnic Groups,14,,0.76,
+20211201,Other,7,,0.38,
+20211201,Unknown,293,,15.8,
+20211201,White,1490,,80.37,
+20220101,African,14,,0.52,
+20220101,"Asian, Asian Scottish or Asian British",70,,2.58,
+20220101,Caribbean or Black,,c,,c
+20220101,Mixed or Multiple Ethnic Groups,9,,0.33,
+20220101,Other,24,,0.88,
+20220101,Unknown,347,,12.79,
+20220101,White,2245,,82.75,
+20220201,African,5,,0.26,
+20220201,"Asian, Asian Scottish or Asian British",50,,2.56,
+20220201,Caribbean or Black,,c,,c
+20220201,Mixed or Multiple Ethnic Groups,9,,0.46,
+20220201,Other,16,,0.82,
+20220201,Unknown,257,,13.16,
+20220201,White,1614,,82.64,
+20220301,African,11,,0.3,
+20220301,"Asian, Asian Scottish or Asian British",50,,1.35,
+20220301,Caribbean or Black,,c,,c
+20220301,Mixed or Multiple Ethnic Groups,13,,0.35,
+20220301,Other,24,,0.65,
+20220301,Unknown,495,,13.38,
+20220301,White,3105,,83.94,
+20220401,African,,c,,c
+20220401,"Asian, Asian Scottish or Asian British",27,,1.14,
+20220401,Caribbean or Black,,c,,c
+20220401,Mixed or Multiple Ethnic Groups,10,,0.42,
+20220401,Other,8,,0.34,
+20220401,Unknown,284,,11.98,
+20220401,White,2035,,85.83,
+20220501,African,,c,,c
+20220501,"Asian, Asian Scottish or Asian British",11,,0.93,
+20220501,Caribbean or Black,,c,,c
+20220501,Mixed or Multiple Ethnic Groups,,c,,c
+20220501,Other,10,,0.85,
+20220501,Unknown,178,,15.05,
+20220501,White,978,,82.67,
+20220601,African,5,,0.21,
+20220601,"Asian, Asian Scottish or Asian British",20,,0.84,
+20220601,Caribbean or Black,,c,,c
+20220601,Mixed or Multiple Ethnic Groups,13,,0.55,
+20220601,Other,15,,0.63,
+20220601,Unknown,333,,13.97,
+20220601,White,1996,,83.72,
+20220701,African,,c,,c
+20220701,"Asian, Asian Scottish or Asian British",53,,1.87,
+20220701,Caribbean or Black,,c,,c
+20220701,Mixed or Multiple Ethnic Groups,15,,0.53,
+20220701,Other,15,,0.53,
+20220701,Unknown,383,,13.5,
+20220701,White,2366,,83.37,
+20220801,African,5,,0.39,
+20220801,"Asian, Asian Scottish or Asian British",33,,2.59,
+20220801,Caribbean or Black,,c,,c
+20220801,Mixed or Multiple Ethnic Groups,6,,0.47,
+20220801,Other,10,,0.79,
+20220801,Unknown,164,,12.88,
+20220801,White,1053,,82.72,
+20220901,African,6,,0.54,
+20220901,"Asian, Asian Scottish or Asian British",21,,1.9,
+20220901,Caribbean or Black,,c,,c
+20220901,Mixed or Multiple Ethnic Groups,,c,,c
+20220901,Other,5,,0.45,
+20220901,Unknown,121,,10.94,
+20220901,White,946,,85.53,
+20221001,African,,c,,c
+20221001,"Asian, Asian Scottish or Asian British",22,,2.13,
+20221001,Caribbean or Black,,c,,c
+20221001,Mixed or Multiple Ethnic Groups,,c,,c
+20221001,Other,13,,1.26,
+20221001,Unknown,128,,12.38,
+20221001,White,867,,83.85,
+20221101,African,,c,,c
+20221101,"Asian, Asian Scottish or Asian British",12,,1.54,
+20221101,Caribbean or Black,,c,,c
+20221101,Mixed or Multiple Ethnic Groups,9,,1.16,
+20221101,Other,6,,0.77,
+20221101,Unknown,102,,13.09,
+20221101,White,647,,83.06,
+20221201,African,,c,,c
+20221201,"Asian, Asian Scottish or Asian British",20,,1.36,
+20221201,Caribbean or Black,,c,,c
+20221201,Mixed or Multiple Ethnic Groups,10,,0.68,
+20221201,Other,10,,0.68,
+20221201,Unknown,185,,12.6,
+20221201,White,1242,,84.6,
+20230101,African,,c,,c
+20230101,"Asian, Asian Scottish or Asian British",11,,0.86,
+20230101,Caribbean or Black,,c,,c
+20230101,Mixed or Multiple Ethnic Groups,,c,,c
+20230101,Other,7,,0.55,
+20230101,Unknown,157,,12.25,
+20230101,White,1100,,85.8,
+20230201,African,,c,,c
+20230201,"Asian, Asian Scottish or Asian British",17,,1.79,
+20230201,Caribbean or Black,,c,,c
+20230201,Mixed or Multiple Ethnic Groups,,c,,c
+20230201,Other,,c,,c
+20230201,Unknown,127,,13.4,
+20230201,White,794,,83.76,
+20230301,African,5,,0.28,
+20230301,"Asian, Asian Scottish or Asian British",28,,1.57,
+20230301,Caribbean or Black,,c,,c
+20230301,Mixed or Multiple Ethnic Groups,,c,,c
+20230301,Other,5,,0.28,
+20230301,Unknown,228,,12.82,
+20230301,White,1507,,84.76,
+20230401,African,7,,0.57,
+20230401,"Asian, Asian Scottish or Asian British",17,,1.38,
+20230401,Caribbean or Black,,c,,c
+20230401,Mixed or Multiple Ethnic Groups,,c,,c
+20230401,Other,7,,0.57,
+20230401,Unknown,142,,11.52,
+20230401,White,1054,,85.48,
