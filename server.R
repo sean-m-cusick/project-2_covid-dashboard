@@ -68,8 +68,13 @@ scotland_pop_proj <- read_csv("data_clean/clean_scotland_pop_proj.csv")
 ca_pop_proj <- read_csv("data_clean/clean_ca_pop_proj.csv")
 
 # Load Scotland spatialdata
-uk_shapefile <- st_read("data_clean/scotland_spatial_data/LAD_DEC_24_UK_BFC.shp")
+# uk_shapefile <- st_read("data_raw/scotland_spatial_data/LAD_DEC_24_UK_BFC.shp") # Scotland data was extracted and put into a geojson
+scotland_sf <- st_read("data_clean/scotland_LAD.geojson")
 council_area_2019 <- read_csv("data_clean/clean_council_area_2019.csv")
+
+# checking the geojson file
+# print(scotland_sf)  # View metadata
+# plot(st_geometry(scotland_sf))  # Quick plot
 
 
 #__________________________________
@@ -87,8 +92,8 @@ scotland_codes <- c(
   "S12000049", "S12000050"
 )
 
-# Filter UK Shape file to just Scotland Council Areas
-scotland_sf <- uk_shapefile[uk_shapefile$LAD24CD %in% scotland_codes, ]
+# # Filter UK Shape file to just Scotland Council Areas
+# scotland_sf <- uk_shapefile[uk_shapefile$LAD24CD %in% scotland_codes, ] # no longer needed as scotland shapefiles were extracted in `data_cleaning.r`
 
 scotland_data <- merge(scotland_sf, council_area_2019, by.x = "LAD24CD", by.y = "ca")
 
