@@ -14,6 +14,7 @@ if (!require(here)) install.packages("here", dependencies=TRUE)
 if (!require(broom)) install.packages("broom", dependencies=TRUE)
 if (!require(slider)) install.packages("slider", dependencies=TRUE)
 if (!require(lubridate)) install.packages("lubridate", dependencies=TRUE)
+if (!require(sf)) install.packages("lubridate", dependencies=TRUE)
 
 library(shiny)
 library(leaflet)
@@ -28,6 +29,7 @@ library(here)
 library(broom)
 library(slider)
 library(lubridate)
+library(sf)                
 
 #__________________________________
 # 2. LOAD DATA                #####
@@ -55,6 +57,9 @@ scotland_pop_proj <- read_csv("data_raw/scotland_pop_proj.csv")
 ca_pop_proj <- read_csv("data_raw/ca_pop_proj.csv")
 hscp_pop_proj <- read_csv("data_raw/hscp_pop_proj.csv")
 hb_pop_proj <- read_csv("data_raw/hb_pop_proj.csv")
+
+# Spatial Data
+uk_shapefile <- st_read("data_clean/scotland_spatial_data/LAD_DEC_24_UK_BFC.shp")
 
 #______________________________________
 # 3. GENERAL DATA CLEANING        #####
@@ -127,6 +132,9 @@ clean_hb_pop_proj <- clean_data_frame(hb_pop_proj)
 # debugging functions - 
 # summary(clean_total_cases_by_health_board)
 # str(clean_total_cases_by_health_board)
+
+# Extract Scotland data from UK shapefile
+scotland_sf <- uk_shapefile[uk_shapefile$LAD24CD %in% scotland_codes, ]
 
 # Dataset looks ready for manipulation
 
@@ -562,4 +570,15 @@ export_to_csv(clean_ca_pop_proj, "clean_ca_pop_proj")
 export_to_csv(clean_hscp_pop_proj, "clean_hscp_pop_proj")
 export_to_csv(clean_hb_pop_proj, "clean_hb_pop_proj")
 export_to_csv(combined_data, "clean_combined_data")
+
+# # Exporting Scotland shapefiles to commit to .git as UK shapefile is > 100mb
+# st_write(
+#   scotland_sf,
+#   "data_clean/scotland_spatial_data/scotland_LAD_DEC_24_BFC.shp",
+#   driver = "ESRI Shapefile",
+#   delete_layer = TRUE  # Overwrite if exists
+# )
+
+# writing shape file crashed IDE so changed to geojson
+st_write(scotland_sf, "data_clean/scotland_LAD.geojson")
 

@@ -50,14 +50,14 @@ hospital_location <- read_csv("data_clean/clean_hospital_location.csv")
 # Total COVID cases
 total_cases_by_local_authority <- read_csv("data_clean/clean_total_cases_by_local_authority.csv")
 total_cases_by_age_sex <- read_csv("data_clean/clean_total_cases_by_age_sex.csv")
-total_cases_by_deprivation <- read_csv("data_clean/clean_total_cases_by_deprivation.csv")
-ethnicity <- read_csv("data_clean/clean_ethnicity.csv") # Monthly hospital Admissions
+# total_cases_by_deprivation <- read_csv("data_clean/clean_total_cases_by_deprivation.csv")
+# ethnicity <- read_csv("data_clean/clean_ethnicity.csv") # Monthly hospital Admissions
 
 # Daily COVID trends
 daily_case_trends_by_local_authority <- read_csv("data_clean/clean_daily_case_trends_by_local_authority.csv")
 daily_case_trends_by_age_sex <- read_csv("data_clean/clean_daily_case_trends_by_age_sex.csv")
-daily_case_trends_by_deprivation <- read_csv("data_clean/clean_daily_case_trends_by_deprivation.csv")
-daily_covid_hospital_admissions <- read_csv("data_clean/clean_daily_covid_hospital_admissions.csv")
+# daily_case_trends_by_deprivation <- read_csv("data_clean/clean_daily_case_trends_by_deprivation.csv")
+# daily_covid_hospital_admissions <- read_csv("data_clean/clean_daily_covid_hospital_admissions.csv")
 
 # Tests
 tests_by_local_authority <- read_csv("data_clean/clean_tests_by_local_authority.csv")
@@ -65,7 +65,7 @@ tests_by_local_authority <- read_csv("data_clean/clean_tests_by_local_authority.
 # Population Data
 ca_pop_est <- read_csv("data_clean/clean_ca_pop_est.csv")
 scotland_pop_proj <- read_csv("data_clean/clean_scotland_pop_proj.csv")
-ca_pop_proj <- read_csv("data_clean/clean_ca_pop_proj.csv")
+# ca_pop_proj <- read_csv("data_clean/clean_ca_pop_proj.csv")
 
 # Load Scotland spatialdata
 # uk_shapefile <- st_read("data_raw/scotland_spatial_data/LAD_DEC_24_UK_BFC.shp") # Scotland data was extracted and put into a geojson
@@ -1028,4 +1028,5 @@ ui <- fluidPage(
           "to", 
           format(input$ts_date_range[2], "%B %d, %Y"))
   })
+  
 }
